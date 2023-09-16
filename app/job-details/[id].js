@@ -6,6 +6,8 @@ import {
   ScrollView,
   ActivityIndicator,
   RefreshControl,
+  Share,
+  Alert,
 } from "react-native";
 import { Stack, useRouter, useGlobalSearchParams } from "expo-router";
 import {
@@ -21,6 +23,9 @@ import useFetch from "../../hooks/useFetch";
 
 const tabs = ["About", "Qualifications", "Responsibilities"];
 
+const JobShareMessage =
+  "🌟Check out this exciting job opportunity\n\nJob Title: [Job Title]\nCompany: [Company Name]\nLocation: [Job Location]\nEmployment Type: [Employment Type]\n\n🔗 Job Link: [Insert Job Link Here]\n\nJoin me in exploring this fantastic job opportunity! It's a perfect match for your skills and career goals. Apply now and take your career to the next level. 🚀\n\n Credits: Jobsee App";
+
 const JobDetails = () => {
   const router = useRouter();
   const { id: jobId } = useGlobalSearchParams();
@@ -29,6 +34,23 @@ const JobDetails = () => {
   const { data, isLoading, error, refetch } = useFetch("job-details", {
     job_id: jobId,
   });
+
+  const onShare = async () => {
+    try {
+      await Share.share({
+        message: JobShareMessage.replace("[Job Title]", data[0].job_title)
+          .replace("[Company Name]", data[0].employer_name)
+          .replace("[Job Location]", data[0].job_country)
+          .replace("[Employment Type]", data[0].job_employment_type)
+          .replace("[Insert Job Link Here]", data[0].job_apply_link),
+        url: data[0].job_google_link,
+        title: data[0].job_title,
+      });
+    } catch (error) {
+      console.log("error occured while sharing job link: ", error.message);
+      alert(error.message);
+    }
+  };
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -82,7 +104,11 @@ const JobDetails = () => {
           ),
           headerRight: () => (
             // to add share functionality later (addon)
-            <ScreenHeaderBtn iconUrl={icons.share} dimension="60%" />
+            <ScreenHeaderBtn
+              iconUrl={icons.share}
+              dimension="60%"
+              handlePress={onShare}
+            />
           ),
         }}
       />
@@ -123,12 +149,7 @@ const JobDetails = () => {
             </View>
           )}
         </ScrollView>
-        <JobFooter
-          url={
-            data[0]?.job_google_link ??
-            "https://careers.google.com/jobs/results"
-          }
-        />
+        <JobFooter url={data[0]?.job_google_link ?? data[0]?.job_apply_link} />
       </>
     </SafeAreaView>
   );
