@@ -7,12 +7,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from "react-native";
-import {
-  Stack,
-  useRouter,
-  useSearchParams,
-  useGlobalSearchParams,
-} from "expo-router";
+import { Stack, useRouter, useGlobalSearchParams } from "expo-router";
 import {
   Company,
   JobAbout,
@@ -27,7 +22,6 @@ import useFetch from "../../hooks/useFetch";
 const tabs = ["About", "Qualifications", "Responsibilities"];
 
 const JobDetails = () => {
-  // const { id } = useSearchParams();
   const router = useRouter();
   const { id: jobId } = useGlobalSearchParams();
   const [refreshing, setRefreshing] = useState(false);
@@ -129,6 +123,12 @@ const JobDetails = () => {
             </View>
           )}
         </ScrollView>
+        <JobFooter
+          url={
+            data[0]?.job_google_link ??
+            "https://careers.google.com/jobs/results"
+          }
+        />
       </>
     </SafeAreaView>
   );
