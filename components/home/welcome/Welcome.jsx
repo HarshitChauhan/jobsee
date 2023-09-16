@@ -11,7 +11,7 @@ import styles from "./welcome.style";
 import { icons, SIZES } from "../../../constants";
 import { useRouter } from "expo-router";
 
-const jobTypes = ["Full-time", "Part-time", "Contractor"];
+const jobTypes = ["Fulltime", "Parttime", "Contractor"];
 
 const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
   const router = useRouter();
@@ -20,8 +20,8 @@ const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
   return (
     <View>
       <View style={styles.container}>
-        <Text style={styles.userName}>Hello, Harshit</Text>
-        <Text style={styles.welcomeMessage}>Find you perfect job.</Text>
+        <Text style={styles.userName}>Hello, Engineer!</Text>
+        <Text style={styles.welcomeMessage}>Find your perfect job.</Text>
       </View>
 
       <View style={styles.searchContainer}>
